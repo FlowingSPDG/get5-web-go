@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/go-ini/ini"
 	"strings"
+	"testing"
 )
 
 // Config Configration Struct for config.ini
@@ -40,6 +41,7 @@ var (
 
 func init() {
 	ConfigPath = flag.String("cfg", "config.ini", "path to config.ini")
+	testing.Init()
 	flag.Parse()
 	c, err := ini.Load(*ConfigPath)
 	if err != nil {
