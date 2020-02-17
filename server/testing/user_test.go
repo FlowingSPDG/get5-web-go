@@ -48,3 +48,23 @@ func TestGetMatchesByUser(t *testing.T) {
 		t.Logf("Matche %d : %v\n", k, v)
 	}
 }
+
+func TestCreateTeamByUser(t *testing.T) {
+	// go test -v -run TestCreateTeamByUser -args -cfg ../config.ini
+	user := &db.UserData{SteamID: "76561198072054549"} // FlowingSPDG
+	user, _, err := user.GetOrCreate()
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+	Team := &db.TeamData{}
+	t.Log("Creating team...")
+	Team, err = Team.Create(user.ID, "TEST_TEAM", "TEST_TAG", "jp", "", []string{"76561198072054549"}, false)
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+	t.Logf("Created team. Team : %v\n", Team)
+	err = Team.Delete()
+	if err != nil {
+		t.Fatal(err.Error())
+	}
+}
