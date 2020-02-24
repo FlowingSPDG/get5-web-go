@@ -23,6 +23,7 @@
                         <el-menu-item index="Matches" id="matches" :route="{ path:'/matches' }" v-if="user.isLoggedIn">{{ $t("App.AllMatches") }}</el-menu-item>
                         <el-menu-item index="My matches" id="mymatches" :route="{ path:'/mymatches' }" v-if="user.isLoggedIn">{{ $t("App.MyMatches") }}</el-menu-item>
                         <el-menu-item index="match_create" id="match_create" :route="{ path:'/match/create' }" v-if="user.isLoggedIn">{{ $t("App.CreateMatch") }}</el-menu-item>
+                        <el-menu-item index="pug_create" id="pug_create" :route="{ path:'/match/create-pug' }" v-if="user.isLoggedIn">{{ $t("App.CreatePug") }}</el-menu-item>
                         <el-menu-item index="myteams" id="myteams" :route="{ path:'/myteams' }" v-if="user.isLoggedIn">{{ $t("App.MyTeams") }}</el-menu-item>
                         <el-menu-item index="team_create" id="matches" :route="{ path:'/team/create' }" v-if="user.isLoggedIn">{{ $t("App.CreateTeam") }}</el-menu-item>
                         <el-menu-item index="myservers" id="myservers" :route="{ path:'/myservers' }" v-if="user.isLoggedIn">{{ $t("App.MyServers") }}</el-menu-item>

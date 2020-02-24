@@ -15,7 +15,7 @@ import (
 func (s Server) RegisterTeam(ctx context.Context, req *pb.RegisterTeamRequest) (*pb.RegisterTeamReply, error) {
 	team := &db.TeamData{}
 	reqteam := req.GetTeam()
-	team, err := team.Create(int(reqteam.GetUserid()), reqteam.GetName(), reqteam.GetTag(), reqteam.GetFlag(), reqteam.GetLogo(), reqteam.GetAuths(), reqteam.GetPublicteam())
+	team, err := team.Create(int(reqteam.GetUserid()), reqteam.GetName(), reqteam.GetTag(), reqteam.GetFlag(), reqteam.GetLogo(), reqteam.GetAuths(), reqteam.GetPublicteam(), false)
 	if err != nil {
 		return &pb.RegisterTeamReply{
 			Error:        true,

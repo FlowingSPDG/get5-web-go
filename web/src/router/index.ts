@@ -14,6 +14,7 @@ import Teams from '@/components/Teams.vue'
 import TeamCreate from '@/components/TeamCreate.vue'
 import ServerCreate from '@/components/ServerCreate.vue'
 import User from '@/components/User.vue'
+import PugCreate from '@/components/PugCreate.vue'
 
 Vue.use(VueAxios, axios)
 Vue.use(Router)
@@ -49,6 +50,11 @@ export default new Router({
       path: '/match/create',
       name: 'Create Match',
       component: MatchCreate
+    },
+    {
+      path: '/match/create-pug',
+      name: 'Create Pug',
+      component: PugCreate
     },
     {
       path: '/match/:matchid',

@@ -13,6 +13,7 @@ import (
 	"net"
 	"os/exec"
 	"strings"
+	"time"
 
 	"github.com/Acidic9/steam"
 	gosteam "github.com/kidoman/go-steam"
@@ -200,4 +201,14 @@ func IsValidSteamID(auth string) bool {
 func Round(f float64, places int) float64 {
 	shift := math.Pow(10, float64(places))
 	return math.Floor(f*shift+.5) / shift
+}
+
+// Shuffle slice
+func Shuffle(s []string) []string {
+	rand.Seed(time.Now().UnixNano())
+	for i := range s {
+		j := rand.Intn(i + 1)
+		s[i], s[j] = s[j], s[i]
+	}
+	return s
 }

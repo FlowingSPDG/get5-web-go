@@ -39,10 +39,46 @@ func (u *UserData) TableName() string {
 	return "user"
 }
 
+// GetOrCreateBySteamID Get or Register Userdata by their steamid into DB.
+func (u *UserData) GetOrCreateBySteamID() (*UserData, bool, error) {
+	return u.GetOrCreate()
+}
+
+// GetOrCreate Get or Register Userdata by their steamid into DB.
+func (u *UserData) GetOrCreateByID(userid int) (*UserData, bool, error) { // userdata, exist,error
+	SQLUserData := UserData{}
+	exist := false
+
+	record := SQLAccess.Gorm.FirstOrCreate(userid, &SQLUserData)
+	if record.RecordNotFound() {
+		exist = false
+		log.Println("USER NOT EXIST!")
+		log.Println("CREATING USER")
+		steamid64, err := strconv.Atoi(u.SteamID)
+		if err != nil {
+			return u, exist, err
+		}
+		SQLUserData.Name, err = GetSteamName(uint64(steamid64))
+		if err != nil {
+			return u, exist, err
+		}
+		SQLAccess.Gorm.Create(&SQLUserData)
+		SQLAccess.Gorm.Where("steam_id = ?", u.SteamID).First(u)
+	} else {
+		log.Println("USER EXIST")
+		exist = true
+		// log.Println(SQLUserData)
+		u.Name = SQLUserData.Name
+		u.ID = SQLUserData.ID
+		u.Admin = SQLUserData.Admin
+		u.SteamID = SQLUserData.SteamID
+	}
+	return u, exist, nil
+}
+
 // GetOrCreate Get or Register Userdata by their steamid into DB.
 func (u *UserData) GetOrCreate() (*UserData, bool, error) { // userdata, exist,error
 	SQLUserData := UserData{}
-	SQLUserData.SteamID = u.SteamID
 	exist := false
 
 	record := SQLAccess.Gorm.Where("steam_id = ?", u.SteamID).First(&SQLUserData)
@@ -229,7 +265,7 @@ func (g *GameServerData) GetDisplay() string {
 
 // TeamData Struct for team table.
 type TeamData struct {
-	ID           int               `gorm:"primary_key;column:id" json:"id"`
+	ID           int               `gorm:"primary_key;column:id;AUTO_INCREMENT" json:"id"`
 	UserID       int               `gorm:"column:user_id" json:"user_id"`
 	Name         string            `gorm:"column:name" json:"name"`
 	Tag          string            `gorm:"column:tag" json:"tag"`
@@ -240,6 +276,7 @@ type TeamData struct {
 	SteamIDsJSON []string          `gorm:"-" json:"auths"`
 	Players      []PlayerStatsData `gorm:"-" json:"-"`
 	PublicTeam   bool              `gorm:"column:public_team" json:"public_team"`
+	MixTeam      bool              `gorm:"column:mix_team" json:"mix_team"`
 }
 
 // TableName declairation for GORM
@@ -248,7 +285,7 @@ func (t *TeamData) TableName() string {
 }
 
 // Create Register Team information into DB.
-func (t *TeamData) Create(userid int, name string, tag string, flag string, logo string, auths []string, publicteam bool) (*TeamData, error) {
+func (t *TeamData) Create(userid int, name string, tag string, flag string, logo string, auths []string, publicteam bool, mixteam bool) (*TeamData, error) {
 	if name == "" {
 		return nil, fmt.Errorf("Team name cannot be empty")
 	}
@@ -264,12 +301,14 @@ func (t *TeamData) Create(userid int, name string, tag string, flag string, logo
 			return nil, fmt.Errorf("Max teams limit exceeded! OWNED[%d] / LIMIT:[%d]", teamnum, config.Cnf.UserMaxResources.Teams)
 		}
 	}
+	t.ID = 0
 	t.UserID = userid
 	t.Name = name
 	t.Tag = tag
 	t.Flag = flag
 	t.Logo = logo
 	t.PublicTeam = publicteam
+	t.MixTeam = mixteam
 	var err error
 	for i := 0; i < len(auths); i++ {
 		auths[i], err = util.AuthToSteamID64(auths[i])
@@ -525,7 +564,7 @@ type MatchConfig struct {
 // MatchData Struct for match table.
 type MatchData struct {
 	// Original columns...
-	ID              int           `gorm:"primary_key;column:id" json:"id"`
+	ID              int           `gorm:"primary_key;column:id;AUTO_INCREMENT" json:"id"`
 	UserID          int           `gorm:"column:user_id" json:"user_id"`
 	ServerID        int           `gorm:"column:server_id" json:"server_id"`
 	Team1ID         int           `gorm:"column:team1_id" json:"team1_id"`
@@ -551,7 +590,10 @@ type MatchData struct {
 	CvarsJSON map[string]string `gorm:"-" json:"cvars"`
 	Cvars     string            `gorm:"column:cvars" json:"-"`
 	SideType  string            `gorm:"column:side_type" json:"side_type"`
-	IsPug     bool              `gorm:"column:is_pug" json:"is_pug"`
+	IsPug     bool              `gorm:"column:is_pug" json:"-"`
+
+	// If its pug
+	SteamIDs []string `gorm:"-" json:"steamids"`
 
 	MapStats []MapStatsData `gorm:"ForeignKey:MatchID" json:"-"`
 	Server   GameServerData `json:"-"`

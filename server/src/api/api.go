@@ -442,7 +442,7 @@ func CreateTeam(c *gin.Context) {
 			c.AbortWithError(http.StatusBadRequest, fmt.Errorf("JSON Format invalid %s", err.Error()))
 			return
 		}
-		_, err = Team.Create(userid, TeamTemp.Name, TeamTemp.Tag, TeamTemp.Flag, TeamTemp.Logo, TeamTemp.SteamIDsJSON, TeamTemp.PublicTeam)
+		_, err = Team.Create(userid, TeamTemp.Name, TeamTemp.Tag, TeamTemp.Flag, TeamTemp.Logo, TeamTemp.SteamIDsJSON, TeamTemp.PublicTeam, false)
 		if err != nil {
 			log.Printf("Failed to create team. ERR : %v\n", err)
 			c.AbortWithError(http.StatusInternalServerError, err)
@@ -633,7 +633,7 @@ func DeleteServer(c *gin.Context) {
 // CreateMatch Registers match info
 func CreateMatch(c *gin.Context) {
 	log.Printf("CreateMatch\n")
-	if c.Params.ByName("matchID") != "create" { // rejects requests other than "/match/create".
+	if c.Params.ByName("matchID") != "create" && c.Params.ByName("matchID") != "create-pug" { // rejects requests other than "/match/create" and "/match/create-pug" .
 		c.AbortWithError(http.StatusBadRequest, fmt.Errorf("Unknown Request"))
 		return
 	}
@@ -644,22 +644,87 @@ func CreateMatch(c *gin.Context) {
 	}
 	if IsLoggedIn {
 		userid := s.Get("UserID").(int)
-		var MatchTemp = db.MatchData{}
-		var Match = db.MatchData{}
-		err := json.NewDecoder(c.Request.Body).Decode(&MatchTemp)
-		if err != nil {
-			log.Printf("ERR : %v\n", err)
-			c.AbortWithError(http.StatusBadRequest, fmt.Errorf("JSON Format invalid %s", err.Error()))
-			return
+		if c.Params.ByName("matchID") == "create" {
+			var MatchTemp = db.MatchData{}
+			var Match = db.MatchData{}
+			err := json.NewDecoder(c.Request.Body).Decode(&MatchTemp)
+			if err != nil {
+				log.Printf("ERR : %v\n", err)
+				c.AbortWithError(http.StatusBadRequest, fmt.Errorf("JSON Format invalid %s", err.Error()))
+				return
+			}
+			log.Printf("CVARS : %v\n", MatchTemp.CvarsJSON)
+			_, err = Match.Create(userid, MatchTemp.Team1ID, MatchTemp.Team2ID, MatchTemp.Team1String, MatchTemp.Team2String, MatchTemp.MaxMaps, MatchTemp.SkipVeto, MatchTemp.Title, MatchTemp.VetoMapPoolJSON, MatchTemp.ServerID, MatchTemp.CvarsJSON, MatchTemp.SideType, false)
+			if err != nil {
+				log.Printf("ERR : %v\n", err)
+				c.AbortWithError(http.StatusInternalServerError, err)
+				return
+			}
+			c.String(http.StatusOK, "OK")
+		} else if c.Params.ByName("matchID") == "create-pug" {
+			// Currently mix pug team is completely shuffled and no way to specify.
+			// If you want to specify teams, create team and assign it manually.
+			var user = &db.UserData{}
+			log.Printf("userid : %v\n", userid)
+			user, _, err := user.GetOrCreateByID(userid)
+			if err != nil {
+				log.Printf("ERR : %v\n", err)
+				c.AbortWithError(http.StatusBadRequest, err)
+				return
+			}
+			var MatchTemp = db.MatchData{}
+			var Match = db.MatchData{}
+			var Team = db.TeamData{
+				ID: 0,
+			}
+			err = json.NewDecoder(c.Request.Body).Decode(&MatchTemp)
+			if err != nil {
+				log.Printf("ERR : %v\n", err)
+				c.AbortWithError(http.StatusBadRequest, fmt.Errorf("JSON Format invalid %s", err.Error()))
+				return
+			}
+			if len(MatchTemp.SteamIDs) != 10 {
+				c.AbortWithError(http.StatusBadRequest, fmt.Errorf("SteamID array should have 10 steamids"))
+				return
+			}
+			MatchTemp.SteamIDs = util.Shuffle(MatchTemp.SteamIDs)
+			// Get captain's SteamName here
+			captain1steamid64, err := strconv.Atoi(MatchTemp.SteamIDs[0])
+			captain2steamid64, err := strconv.Atoi(MatchTemp.SteamIDs[5])
+			if err != nil {
+				log.Printf("ERR : %v\n", err)
+				c.AbortWithError(http.StatusBadRequest, err)
+			}
+			captain1name, err := db.GetSteamName(uint64(captain1steamid64))
+			captain2name, err := db.GetSteamName(uint64(captain2steamid64))
+
+			team1name := fmt.Sprintf("MIX_%s", captain1name) // team1 captain's name
+			team2name := fmt.Sprintf("MIX_%s", captain2name) // team2 captains's name
+			// Create Team1
+			team1, err := Team.Create(userid, team1name, team1name, "", "", MatchTemp.SteamIDs[:4], false, true)
+			if err != nil {
+				log.Printf("ERR : %v\n", err)
+				c.AbortWithError(http.StatusInternalServerError, err)
+				return
+			}
+			// Create Team2
+			team2, err := Team.Create(userid, team2name, team2name, "", "", MatchTemp.SteamIDs[5:], false, true)
+			if err != nil {
+				log.Printf("ERR : %v\n", err)
+				c.AbortWithError(http.StatusInternalServerError, err)
+				return
+			}
+
+			_, err = Match.Create(userid, team1.ID, team2.ID, MatchTemp.Team1String, MatchTemp.Team2String, MatchTemp.MaxMaps, MatchTemp.SkipVeto, MatchTemp.Title, MatchTemp.VetoMapPoolJSON, MatchTemp.ServerID, nil, MatchTemp.SideType, true)
+			if err != nil {
+				log.Printf("ERR : %v\n", err)
+				c.AbortWithError(http.StatusInternalServerError, err)
+				return
+			}
+
+			c.String(http.StatusOK, "OK")
 		}
-		log.Printf("CVARS : %v\n", MatchTemp.CvarsJSON)
-		_, err = Match.Create(userid, MatchTemp.Team1ID, MatchTemp.Team2ID, MatchTemp.Team1String, MatchTemp.Team2String, MatchTemp.MaxMaps, MatchTemp.SkipVeto, MatchTemp.Title, MatchTemp.VetoMapPoolJSON, MatchTemp.ServerID, MatchTemp.CvarsJSON, MatchTemp.SideType, MatchTemp.IsPug)
-		if err != nil {
-			log.Printf("ERR : %v\n", err)
-			c.AbortWithError(http.StatusInternalServerError, err)
-			return
-		}
-		c.String(http.StatusOK, "OK")
+
 	} else {
 		c.AbortWithError(http.StatusForbidden, fmt.Errorf("Forbidden"))
 	}
