@@ -644,6 +644,7 @@ func CreateMatch(c *gin.Context) {
 	}
 	if IsLoggedIn {
 		userid := s.Get("UserID").(int)
+		// /api/v1/match/create
 		if c.Params.ByName("matchID") == "create" {
 			var MatchTemp = db.MatchData{}
 			var Match = db.MatchData{}
@@ -662,8 +663,9 @@ func CreateMatch(c *gin.Context) {
 			}
 			c.String(http.StatusOK, "OK")
 		} else if c.Params.ByName("matchID") == "create-pug" {
+			// /api/v1/match/create-pug
 			// Currently mix pug team is completely shuffled and no way to specify.
-			// If you want to specify teams, create team and assign it manually.
+			// If you want to specify teams, create team and create match manually.
 			var user = &db.UserData{}
 			log.Printf("userid : %v\n", userid)
 			user, _, err := user.GetOrCreateByID(userid)
