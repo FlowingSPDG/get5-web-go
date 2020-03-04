@@ -43,7 +43,7 @@ func CheckLoggedIn(c *gin.Context) {
 	log.Println("CheckLoggedIn")
 	identityKey := "id"
 	claims := jwt.ExtractClaims(c)
-	log.Printf("claims : %v\n", claims)
+	log.Printf("JWT_TOKEN : %v", c.Keys["JWT_TOKEN"])
 	user, exist := c.Get(identityKey)
 	if !exist {
 		c.JSON(http.StatusOK, gin.H{

@@ -41,7 +41,13 @@ export default {
     },
     async GetMatchData (matchid) {
       return new Promise(async (resolve, reject) => {
-        const res = await this.axios.get(`/api/v1/match/${matchid}/GetMatchInfo`)
+        const res = await this.axios.get(`/api/v1/match/${matchid}/GetMatchInfo`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + this.$store.state.auth
+          },
+          data: {}
+        })
         resolve(res.data)
       })
     },

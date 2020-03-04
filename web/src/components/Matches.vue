@@ -100,7 +100,13 @@ export default {
         if (this.$route.params.userid) {
           this.all_matches = false
           try {
-            let res = await this.axios.get('/api/v1/CheckLoggedIn')
+            const res = await this.axios.get('/api/v1/CheckLoggedIn', {
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + this.$store.state.auth
+              },
+              data: {}
+            })
             this.user = res.data
             resolve()
           } catch (err) {
@@ -131,7 +137,13 @@ export default {
       self.loadingmore = true
       return new Promise(async (resolve, reject) => {
         if (userid) {
-          const res = await this.axios.get(`/api/v1/GetMatches?userID=${userid}`)
+          const res = await this.axios.get(`/api/v1/GetMatches?userID=${userid}`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + this.$store.state.auth
+            },
+            data: {}
+          })
           self.loaded = self.loaded + res.data.length
           for (let i = 0; i < res.data.length; i++) {
             this.matches.push(res.data[i])
