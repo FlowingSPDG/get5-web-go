@@ -95,7 +95,13 @@ export default {
     this.user = await CheckLoggedIn()
     if (this.edit) {
       try {
-        let res = await this.axios.get(`api/v1/server/${this.$route.params.serverID}/GetServerInfo`)
+        let res = await this.axios.get(`api/v1/server/${this.$route.params.serverID}/GetServerInfo`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.$store.state.auth}`
+          },
+          data: null
+        })
         this.form.ip_string = res.data.ip_string
         this.form.port = res.data.port
         this.form.rcon_password = res.data.rcon_password

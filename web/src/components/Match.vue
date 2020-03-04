@@ -311,7 +311,13 @@ export default {
   methods: {
     async GetPlayerStats (matchid, mapid) {
       return new Promise(async (resolve, reject) => {
-        const res = await this.axios.get(`/api/v1/match/${matchid}/GetPlayerStatInfo?mapID=${mapid}`)
+        const res = await this.axios.get(`/api/v1/match/${matchid}/GetPlayerStatInfo?mapID=${mapid}`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.$store.state.auth}`
+          },
+          data: null
+        })
         if (!this.matchdata.team1_player_stats) {
           this.matchdata.team1_player_stats = {}
           this.matchdata.team1_player_stats[mapid] = []
@@ -492,7 +498,13 @@ export default {
     },
     async GetBackupList () {
       try {
-        let backups = await this.axios.get(`/api/v1/match/${this.matchdata.id}/backup`)
+        let backups = await this.axios.get(`/api/v1/match/${this.matchdata.id}/backup`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.$store.state.auth}`
+          },
+          data: null
+        })
         this.backups = backups.data.files
         this.chose_backup = true
       } catch (err) {

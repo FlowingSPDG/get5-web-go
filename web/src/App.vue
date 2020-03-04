@@ -76,7 +76,13 @@ export default {
     this.LogoTransition = true
     this.activeIndex = this.$route.name
     this.user = await CheckLoggedIn()
-    let Version = await axios.get('/api/v1/GetVersion')
+    let Version = await axios.get('/api/v1/GetVersion', {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.$store.state.auth}`
+      },
+      data: null
+    })
     this.version = Version.data.version
     // console.log(this.$store.state.auth)
   },

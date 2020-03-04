@@ -186,7 +186,13 @@ export default {
     this.user = await CheckLoggedIn()
     if (this.edit) {
       try {
-        let res = await this.axios.get(`api/v1/team/${this.$route.params.teamid}/GetTeamInfo`)
+        let res = await this.axios.get(`api/v1/team/${this.$route.params.teamid}/GetTeamInfo`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.$store.state.auth}`
+          },
+          data: null
+        })
         this.form.name = res.data.name
         this.form.tag = res.data.tag
         this.form.flag = res.data.flag

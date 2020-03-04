@@ -96,11 +96,23 @@ export default {
     async GetMatches (userid) {
       return new Promise(async (resolve, reject) => {
         if (!userid) {
-          const res = await this.axios.get('/api/v1/GetMatches')
+          const res = await this.axios.get('/api/v1/GetMatches', {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.$store.state.auth}`
+            },
+            data: null
+          })
           this.matches = res.data
           resolve(res.data)
         } else {
-          const res = await this.axios.get(`/api/v1/GetMatches?userID=${userid}`)
+          const res = await this.axios.get(`/api/v1/GetMatches?userID=${userid}`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.$store.state.auth}`
+            },
+            data: null
+          })
           this.matches = res.data
           resolve(res.data)
         }
