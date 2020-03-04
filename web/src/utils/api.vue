@@ -8,6 +8,18 @@ export default {
       this.$i18n.locale = lang
       this.$message(this.$t('lang.LanguageChanged'))
     },
+    async CheckLoggedIn () {
+      return new Promise(async (resolve, reject) => {
+        const res = await this.axios.get('/api/v1/CheckLoggedIn', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + this.$store.state.auth
+          },
+          data: {}
+        })
+        resolve(res.data)
+      })
+    },
     async GetUserData (userid) {
       return new Promise(async (resolve, reject) => {
         const res = await this.axios.get(`/api/v1/user/${userid}/GetUserInfo`, {

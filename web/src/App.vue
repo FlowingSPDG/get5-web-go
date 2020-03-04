@@ -75,8 +75,7 @@ export default {
   async mounted () {
     this.LogoTransition = true
     this.activeIndex = this.$route.name
-    let LoggedIn = await axios.get('/api/v1/CheckLoggedIn')
-    this.user = LoggedIn.data
+    this.user = await CheckLoggedIn()
     let Version = await axios.get('/api/v1/GetVersion')
     this.version = Version.data.version
     // console.log(this.$store.state.auth)

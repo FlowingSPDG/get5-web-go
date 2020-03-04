@@ -41,8 +41,7 @@ export default {
     }
   },
   async created () {
-    let res = await this.axios.get('/api/v1/CheckLoggedIn')
-    this.user = res.data
+    this.user = await CheckLoggedIn()
     if (this.user.userid === this.$route.params.userid || this.$route.path === '/myteams') {
       this.my_teams = true
     }

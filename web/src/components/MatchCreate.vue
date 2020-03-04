@@ -201,7 +201,7 @@ export default {
     }
   },
   async created () {
-    this.user = await this.axios.get('/api/v1/CheckLoggedIn')
+    this.user = await CheckLoggedIn()
     this.servers = await this.GetServers()
     this.teams = await this.GetTeams()
     this.mappool = await this.GetMapList()

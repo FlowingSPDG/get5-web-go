@@ -35,8 +35,7 @@ export default {
     }
   },
   async created () {
-    let res = await this.axios.get('/api/v1/CheckLoggedIn')
-    this.user = res.data
+    this.user = await CheckLoggedIn()
     let servers = await this.GetUserData(res.data.userid)
     this.servers = servers.servers
   },

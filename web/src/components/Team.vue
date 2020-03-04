@@ -84,8 +84,7 @@ export default {
     for (let i = 0; i < this.team.steamids.length; i++) {
       this.GetSteamName(this.team.steamids[i])
     }
-    const loggedin = await this.axios.get('/api/v1/CheckLoggedIn')
-    this.user = loggedin.data
+    this.user = await CheckLoggedIn()
     this.Editable = this.CheckTeamEditable(this.user.userid)
     this.Deletable = this.CheckTeamDeletable(this.user.userid)
   },

@@ -100,14 +100,7 @@ export default {
         if (this.$route.params.userid) {
           this.all_matches = false
           try {
-            const res = await this.axios.get('/api/v1/CheckLoggedIn', {
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + this.$store.state.auth
-              },
-              data: {}
-            })
-            this.user = res.data
+            this.user = await CheckLoggedIn()
             resolve()
           } catch (err) {
             this.user = {}
@@ -119,8 +112,7 @@ export default {
           }
         } else {
           try {
-            const res = await this.axios.get('/api/v1/CheckLoggedIn')
-            this.user = res.data
+            this.user = await CheckLoggedIn()
             this.my_matches = this.$route.params.userid === this.user.userid
           } catch (err) {
             this.my_matches = false
@@ -141,8 +133,7 @@ export default {
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer ' + this.$store.state.auth
-            },
-            data: {}
+            }
           })
           self.loaded = self.loaded + res.data.length
           for (let i = 0; i < res.data.length; i++) {

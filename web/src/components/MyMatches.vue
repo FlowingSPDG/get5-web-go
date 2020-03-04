@@ -78,8 +78,7 @@ export default {
   async created () {
     let self = this
     try {
-      const res = await this.axios.get('/api/v1/CheckLoggedIn')
-      this.user = res.data
+      this.user = await CheckLoggedIn()
     } catch (err) {
       this.user = {
         isLoggedIn: false,

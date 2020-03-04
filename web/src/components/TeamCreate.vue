@@ -183,7 +183,7 @@ export default {
     }
   },
   async created () {
-    this.user = await this.axios.get('/api/v1/CheckLoggedIn')
+    this.user = await CheckLoggedIn()
     if (this.edit) {
       try {
         let res = await this.axios.get(`api/v1/team/${this.$route.params.teamid}/GetTeamInfo`)

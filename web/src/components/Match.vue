@@ -305,8 +305,7 @@ export default {
     this.team1 = await team1Promise
     this.team2 = await team2Promise
     this.loading = false
-    let res = await this.axios.get('/api/v1/CheckLoggedIn')
-    this.user = res.data
+    this.user = await CheckLoggedIn()
     // this.Editable = this.CheckTeamEditable(this.$route.params.teamid,this.user.userid) // TODO
   },
   methods: {
