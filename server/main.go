@@ -25,18 +25,19 @@ func main() {
 
 	r := gin.Default()
 
-	//s := r.Host(HOST).Subrouter() // in-case if we need vhost thing
-
-	// misc
-	r.GET("/login", db.LoginHandler)
-	r.GET("/logout", db.LogoutHandler)
-
-	v1 := r.Group("/api/v1")
+	auth := r.Group("/auth")
+	// Refresh time can be longer than token timeout
+	auth.GET("/refresh_token", db.AuthMidldleware.RefreshHandler)
 	{
 		// session handling
-		v1.GET("/login", db.LoginHandler)
-		v1.GET("/logout", db.LogoutHandler)
+		auth.GET("/login", db.AuthMidldleware.LoginHandler)
+		auth.GET("/logout", db.AuthMidldleware.LogoutHandler)
+	}
 
+	//s := r.Host(HOST).Subrouter() // in-case if we need vhost thing
+	v1 := r.Group("/api/v1")
+	v1.Use(db.AuthMidldleware.MiddlewareFunc())
+	{
 		v1.GET("/GetMatches", api.GetMatches)
 		v1.GET("/GetMetrics", api.GetMetrics)
 		v1.GET("/GetSteamName", api.GetSteamName)

@@ -53,23 +53,6 @@ deps: deps-web deps-go
 deps-web:
 	@yarn global add @vue/cli
 	@cd ./web && yarn
-deps-go:
-	-@$(RM) $(GOPATHDIR)/src/github.com/FlowingSPDG/get5-web-go
-	@$(GOGET) -v -u \
-	github.com/rubenv/sql-migrate \
-	golang.org/x/sys/unix \
-	github.com/mitchellh/gox \
-	github.com/go-ini/ini \
-	github.com/gin-gonic/gin \
-	github.com/hydrogen18/stalecucumber \
-	github.com/solovev/steam_go \
-	github.com/go-sql-driver/mysql \
-	github.com/jinzhu/gorm \
-	github.com/kataras/go-sessions \
-	github.com/Acidic9/steam \
-	github.com/kidoman/go-steam \
-	github.com/FlowingSPDG/get5-web-go/server/src/grpc \
-# Cross compile for go
 build-all: clean build-prepare build-web
 	@cd ./server && gox \
 	-os="$(OS_Windows) $(OS_Mac) $(OS_Linux)" \

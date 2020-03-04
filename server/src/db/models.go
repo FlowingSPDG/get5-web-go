@@ -14,7 +14,7 @@ import (
 	//"github.com/FlowingSPDG/go-steamapi"
 	"github.com/Acidic9/steam"
 	"github.com/jinzhu/gorm"
-	gosteam "github.com/kidoman/go-steam"
+	gosteam "github.com/FlowingSPDG/go-steam"
 
 	//"github.com/solovev/steam_go"
 	//_ "html/template"

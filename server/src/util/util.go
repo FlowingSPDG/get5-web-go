@@ -15,7 +15,7 @@ import (
 	"strings"
 
 	"github.com/Acidic9/steam"
-	gosteam "github.com/kidoman/go-steam"
+	gosteam "github.com/FlowingSPDG/go-steam"
 	"strconv"
 )
 

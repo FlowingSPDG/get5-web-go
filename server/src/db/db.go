@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"log"
@@ -33,6 +34,8 @@ var (
 	SQLAccess DBdatas
 	// Sess Session
 	Sess *sessions.Sessions
+	// AuthMidldleware is middleware for steam and jwt sign-in
+	AuthMidldleware *jwt.GinJWTMiddleware
 )
 
 func init() {
@@ -73,50 +76,88 @@ func init() {
 		// want to be crazy safe? Take a look at the "securecookie" example folder.
 	})
 
-}
+	identityKey := "id"
+	// the jwt middleware
+	AuthMidldleware, err = jwt.New(&jwt.GinJWTMiddleware{
+		Realm:       "test zone",
+		Key:         []byte("secret key"),
+		Timeout:     time.Hour,
+		MaxRefresh:  time.Hour,
+		IdentityKey: identityKey,
+		PayloadFunc: func(data interface{}) jwt.MapClaims {
+			log.Printf("data : %v\n", data)
+			if v, ok := data.(*UserData); ok {
+				return jwt.MapClaims{
+					identityKey: v.ID,
+				}
+			}
+			return jwt.MapClaims{}
+		},
+		IdentityHandler: func(c *gin.Context) interface{} {
+			claims := jwt.ExtractClaims(c)
+			return &UserData{
+				ID: int(claims[identityKey].(float64)),
+			}
+		},
+		Authenticator: func(c *gin.Context) (interface{}, error) {
+			opID := steam_go.NewOpenId(c.Request)
+			switch opID.Mode() {
+			case "":
+				c.Redirect(302, opID.AuthUrl())
+				return nil, jwt.ErrFailedAuthentication
+			case "cancel":
+				return nil, jwt.ErrFailedAuthentication
+			default:
+				user := &UserData{}
+				steamid, err := opID.ValidateAndGetId()
+				if err != nil {
+					c.AbortWithError(http.StatusUnauthorized, err)
+					return nil, jwt.ErrFailedAuthentication
+				}
+				user.SteamID = steamid
+				user, _, err = user.GetOrCreate()
+				if err != nil {
+					c.AbortWithError(http.StatusUnauthorized, err)
+					return nil, jwt.ErrFailedAuthentication
+				}
+				return user, nil
+			}
+		},
+		/*LoginResponse: func(c *gin.Context, code int, token string, expire time.Time) {
+			// c.Redirect(302, "/")
+			// return
+		},*/
+		Authorizator: func(data interface{}, c *gin.Context) bool {
+			if _, ok := data.(*UserData); ok {
+				return true
+			}
+			return false
+		},
+		Unauthorized: func(c *gin.Context, code int, message string) {
+			c.JSON(code, gin.H{
+				"code":    code,
+				"message": message,
+			})
+		},
+		// TokenLookup is a string in the form of "<source>:<name>" that is used
+		// to extract token from the request.
+		// Optional. Default value "header:Authorization".
+		// Possible values:
+		// - "header:<name>"
+		// - "query:<name>"
+		// - "cookie:<name>"
+		// - "param:<name>"
+		TokenLookup: "header: Authorization, query: token, cookie: jwt",
+		// TokenLookup: "query:token",
+		// TokenLookup: "cookie:token",
 
-// LoginHandler HTTP Handler for /login page.
-func LoginHandler(c *gin.Context) {
-	log.Printf("LoginHandler\n")
-	opID := steam_go.NewOpenId(c.Request)
-	switch opID.Mode() {
-	case "":
-		http.Redirect(c.Writer, c.Request, opID.AuthUrl(), 302)
-	case "cancel":
-		http.Redirect(c.Writer, c.Request, DefaultPage, 302)
-	default:
-		steamid, err := opID.ValidateAndGetId()
-		if err != nil {
-			http.Error(c.Writer, err.Error(), http.StatusInternalServerError)
-			panic(err)
-		}
-		log.Println("SteamID : " + steamid)
+		// TokenHeadName is a string in the header. Default value is "Bearer"
+		TokenHeadName: "Bearer",
 
-		user := UserData{SteamID: steamid}
-		user.GetOrCreate()
-		s := Sess.Start(c.Writer, c.Request)
-		// Set some session values.
-		s.Set("Loggedin", true)
-		s.Set("UserID", user.ID) // should be get5 id
-		s.Set("Name", user.Name)
-		s.Set("SteamID", steamid)
-		s.Set("Loggedin", true)
-		s.Set("Admin", false)
-		if user.Admin {
-			s.Set("Admin", true)
-		}
+		// TimeFunc provides the current time. You can override it to use another time value. This is useful for testing or if your server uses a different time zone than your tokens.
+		TimeFunc: time.Now,
+	})
 
-		// Register to DB if its new player
-		http.Redirect(c.Writer, c.Request, "/", 302)
-	}
-}
-
-// LogoutHandler HTTP Handler for /logout
-func LogoutHandler(c *gin.Context) {
-	log.Printf("LogoutHandler\n")
-	s := Sess.Start(c.Writer, c.Request)
-	s.Destroy()
-	http.Redirect(c.Writer, c.Request, "/", 302)
 }
 
 // GetUserData Gets UserData array via MySQL(GORM).

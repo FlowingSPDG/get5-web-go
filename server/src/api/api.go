@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/FlowingSPDG/get5-web-go/server/src/cfg"
 	"github.com/FlowingSPDG/get5-web-go/server/src/util"
+	"github.com/appleboy/gin-jwt/v2"
 	"github.com/gin-gonic/gin"
 	"log"
 
@@ -40,17 +41,23 @@ func GetMapList(c *gin.Context) {
 // CheckLoggedIn handler for /api/v1/CheckLoggedIn API.
 func CheckLoggedIn(c *gin.Context) {
 	log.Println("CheckLoggedIn")
-	s := db.Sess.Start(c.Writer, c.Request)
-	if s.Get("Loggedin") != nil {
+	identityKey := "id"
+	claims := jwt.ExtractClaims(c)
+	log.Printf("claims : %v\n", claims)
+	user, exist := c.Get(identityKey)
+	if !exist {
 		c.JSON(http.StatusOK, gin.H{
-			"isLoggedIn": s.Get("Loggedin").(bool),
-			"isAdmin":    s.Get("Admin").(bool),
-			"steamid":    s.Get("SteamID").(string),
-			"userid":     s.Get("UserID").(int),
+			"isLoggedIn": false,
 		})
 		return
 	}
-	c.AbortWithError(http.StatusUnauthorized, fmt.Errorf("User not found"))
+	c.JSON(http.StatusOK, gin.H{
+		"isLoggedIn": true,
+		// "isAdmin":    s.Get("Admin").(bool),
+		// "steamid":    s.Get("SteamID").(string),
+		"user":   user.(*db.UserData),
+		"userid": claims[identityKey],
+	})
 }
 
 // GetMatchInfo Gets match info by ID
