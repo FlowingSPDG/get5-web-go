@@ -60,27 +60,11 @@ func init() {
 	SteamAPIKey = config.Cnf.SteamAPIKey
 	DefaultPage = config.Cnf.DefaultPage
 
-	Sess = sessions.New(sessions.Config{
-		// Cookie string, the session's client cookie name, for example: "mysessionid"
-		//
-		// Defaults to "gosessionid"
-		Cookie: config.Cnf.Cookie,
-		// it's time.Duration, from the time cookie is created, how long it can be alive?
-		// 0 means no expire.
-		// -1 means expire when browser closes
-		// or set a value, like 2 hours:
-		Expires: time.Hour * 2,
-		// if you want to invalid cookies on different subdomains
-		// of the same host, then enable it
-		DisableSubdomainPersistence: false,
-		// want to be crazy safe? Take a look at the "securecookie" example folder.
-	})
-
 	identityKey := "id"
 	// the jwt middleware
 	AuthMidldleware, err = jwt.New(&jwt.GinJWTMiddleware{
 		Realm:       "test zone",
-		Key:         []byte("secret key"),
+		Key:         []byte(config.Cnf.Cookie),
 		Timeout:     time.Hour,
 		MaxRefresh:  time.Hour,
 		IdentityKey: identityKey,
@@ -123,10 +107,11 @@ func init() {
 				return user, nil
 			}
 		},
-		/*LoginResponse: func(c *gin.Context, code int, token string, expire time.Time) {
-			// c.Redirect(302, "/")
-			// return
-		},*/
+		LoginResponse: func(c *gin.Context, code int, token string, expire time.Time) {
+			body := fmt.Sprintf("/#/auth?auth=%s&expire=%s", token, expire)
+			// log.Printf("body : %v\n", body)
+			c.Redirect(302, body)
+		},
 		Authorizator: func(data interface{}, c *gin.Context) bool {
 			if _, ok := data.(*UserData); ok {
 				return true

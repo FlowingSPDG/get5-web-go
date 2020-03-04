@@ -27,8 +27,8 @@
                         <el-menu-item index="team_create" id="matches" :route="{ path:'/team/create' }" v-if="user.isLoggedIn">{{ $t("App.CreateTeam") }}</el-menu-item>
                         <el-menu-item index="myservers" id="myservers" :route="{ path:'/myservers' }" v-if="user.isLoggedIn">{{ $t("App.MyServers") }}</el-menu-item>
                         <el-menu-item index="server_create" id="server_create" :route="{ path:'/server/create' }" v-if="user.isLoggedIn">{{ $t("App.AddServer") }}</el-menu-item>
-                        <el-menu-item index="logout" id="logout" v-if="user.isLoggedIn"> <a href='/api/v1/logout' v-if="user.isLoggedIn">{{ $t("App.Logout") }}</a> </el-menu-item>
-                        <el-menu-item index="login" id="login" v-if="!user.isLoggedIn"> <a href='/api/v1/login' v-if="!user.isLoggedIn"> <img src="/img/login_small.png" height="18" /></a> </el-menu-item>
+                        <el-menu-item index="logout" id="logout" v-if="user.isLoggedIn"> <a href='/auth/logout' v-if="user.isLoggedIn">{{ $t("App.Logout") }}</a> </el-menu-item>
+                        <el-menu-item index="login" id="login" v-if="!user.isLoggedIn"> <a href='/auth/login' v-if="!user.isLoggedIn"> <img src="/img/login_small.png" height="18" /></a> </el-menu-item>
                       <el-dropdown @command="handleLanguage">
                         <el-button>
                           {{ $t("lang.ChangeLanguage") }}<i class="el-icon-arrow-down el-icon--right"></i>
@@ -79,6 +79,7 @@ export default {
     this.user = LoggedIn.data
     let Version = await axios.get('/api/v1/GetVersion')
     this.version = Version.data.version
+    console.log(this.$store.state.auth)
   },
   methods: {
     handleLanguage: function (command) {

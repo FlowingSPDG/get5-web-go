@@ -14,6 +14,7 @@ import Teams from '@/components/Teams.vue'
 import TeamCreate from '@/components/TeamCreate.vue'
 import ServerCreate from '@/components/ServerCreate.vue'
 import User from '@/components/User.vue'
+import Auth from '@/utils/auth.vue'
 
 Vue.use(VueAxios, axios)
 Vue.use(Router)
@@ -21,6 +22,11 @@ Vue.use(Router)
 export default new Router({
   mode: 'hash',
   routes: [
+    {
+      path: '/auth',
+      name: '',
+      component: Auth
+    },
     {
       path: '/',
       redirect: '/matches'
