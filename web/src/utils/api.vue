@@ -13,9 +13,9 @@ export default {
         const res = await this.axios.get('/api/v1/CheckLoggedIn', {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + this.$store.state.auth
+            'Authorization': `Bearer ${this.$store.state.auth}`
           },
-          data: {}
+          data: null
         })
         resolve(res.data)
       })
@@ -25,9 +25,9 @@ export default {
         const res = await this.axios.get(`/api/v1/user/${userid}/GetUserInfo`, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + this.$store.state.auth
+            'Authorization': `Bearer ${this.$store.state.auth}`
           },
-          data: {}
+          data: null
         })
         resolve(res.data)
       })
@@ -38,9 +38,9 @@ export default {
           const res = await this.axios.get(`/api/v1/team/${teamid}/GetTeamInfo`, {
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + this.$store.state.auth
+              'Authorization': `Bearer ${this.$store.state.auth}`
             },
-            data: {}
+            data: null
           })
           resolve(res.data)
         } catch (err) {
@@ -62,9 +62,9 @@ export default {
         const res = await this.axios.get(`/api/v1/server/${serverid}/GetServerInfo`, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + this.$store.state.auth
+            'Authorization': `Bearer ${this.$store.state.auth}`
           },
-          data: {}
+          data: null
         })
         resolve(res.data)
       })
@@ -74,9 +74,9 @@ export default {
         const res = await this.axios.get(`/api/v1/match/${matchid}/GetMatchInfo`, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + this.$store.state.auth
+            'Authorization': `Bearer ${this.$store.state.auth}`
           },
-          data: {}
+          data: null
         })
         resolve(res.data)
       })
@@ -86,9 +86,9 @@ export default {
         const res = await this.axios.get(`/api/v1/team/${teamid}/GetRecentMatches`, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + this.$store.state.auth
+            'Authorization': `Bearer ${this.$store.state.auth}`
           },
-          data: {}
+          data: null
         })
         resolve(res.data)
       })
@@ -98,9 +98,9 @@ export default {
         const res = await this.axios.get(`/api/v1/GetMapList`, {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + this.$store.state.auth
+            'Authorization': `Bearer ${this.$store.state.auth}`
           },
-          data: {}
+          data: null
         })
         resolve(res.data)
       })
@@ -188,9 +188,9 @@ export default {
         const res = await this.axios.get('/api/v1/GetTeamList', {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + this.$store.state.auth
+            'Authorization': `Bearer ${this.$store.state.auth}`
           },
-          data: {}
+          data: null
         })
         resolve(res.data)
       })
@@ -200,9 +200,9 @@ export default {
         const res = await this.axios.get('/api/v1/GetServerList', {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + this.$store.state.auth
+            'Authorization': `Bearer ${this.$store.state.auth}`
           },
-          data: {}
+          data: null
         })
         resolve(res.data)
       })

@@ -132,8 +132,9 @@ export default {
           const res = await this.axios.get(`/api/v1/GetMatches?userID=${userid}`, {
             headers: {
               'Content-Type': 'application/json',
-              'Authorization': 'Bearer ' + this.$store.state.auth
-            }
+              'Authorization': `Bearer ${this.$store.state.auth}`
+            },
+            data: {}
           })
           self.loaded = self.loaded + res.data.length
           for (let i = 0; i < res.data.length; i++) {
@@ -150,7 +151,13 @@ export default {
             }
           }
         } else {
-          const res = await this.axios.get(`/api/v1/GetMatches?offset=${this.loaded}`)
+          const res = await this.axios.get(`/api/v1/GetMatches?offset=${this.loaded}`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${this.$store.state.auth}`
+            },
+            data: {}
+          })
           self.loaded = self.loaded + res.data.length
           if (res.data.length === 0) {
             self.limit = true
