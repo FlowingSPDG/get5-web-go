@@ -10,14 +10,26 @@ export default {
     },
     async GetUserData (userid) {
       return new Promise(async (resolve, reject) => {
-        const res = await this.axios.get(`/api/v1/user/${userid}/GetUserInfo`)
+        const res = await this.axios.get(`/api/v1/user/${userid}/GetUserInfo`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + this.$store.state.auth
+          },
+          data: {}
+        })
         resolve(res.data)
       })
     },
     async GetTeamData (teamid) {
       return new Promise(async (resolve, reject) => {
         try {
-          const res = await this.axios.get(`/api/v1/team/${teamid}/GetTeamInfo`)
+          const res = await this.axios.get(`/api/v1/team/${teamid}/GetTeamInfo`, {
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer ' + this.$store.state.auth
+            },
+            data: {}
+          })
           resolve(res.data)
         } catch (err) {
           resolve({
@@ -35,7 +47,13 @@ export default {
     },
     async GetServerData (serverid) {
       return new Promise(async (resolve, reject) => {
-        const res = await this.axios.get(`/api/v1/server/${serverid}/GetServerInfo`)
+        const res = await this.axios.get(`/api/v1/server/${serverid}/GetServerInfo`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + this.$store.state.auth
+          },
+          data: {}
+        })
         resolve(res.data)
       })
     },
@@ -53,13 +71,25 @@ export default {
     },
     async GetRecentMatches (teamid) {
       return new Promise(async (resolve, reject) => {
-        const res = await this.axios.get(`/api/v1/team/${teamid}/GetRecentMatches`)
+        const res = await this.axios.get(`/api/v1/team/${teamid}/GetRecentMatches`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + this.$store.state.auth
+          },
+          data: {}
+        })
         resolve(res.data)
       })
     },
     async GetMapList () {
       return new Promise(async (resolve, reject) => {
-        const res = await this.axios.get(`/api/v1/GetMapList`)
+        const res = await this.axios.get(`/api/v1/GetMapList`, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + this.$store.state.auth
+          },
+          data: {}
+        })
         resolve(res.data)
       })
     },
@@ -143,13 +173,25 @@ export default {
     },
     async GetTeams () {
       return new Promise(async (resolve, reject) => {
-        const res = await this.axios.get('/api/v1/GetTeamList')
+        const res = await this.axios.get('/api/v1/GetTeamList', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + this.$store.state.auth
+          },
+          data: {}
+        })
         resolve(res.data)
       })
     },
     async GetServers () {
       return new Promise(async (resolve, reject) => {
-        const res = await this.axios.get('/api/v1/GetServerList')
+        const res = await this.axios.get('/api/v1/GetServerList', {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + this.$store.state.auth
+          },
+          data: {}
+        })
         resolve(res.data)
       })
     }
