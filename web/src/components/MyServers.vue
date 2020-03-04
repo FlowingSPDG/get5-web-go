@@ -35,7 +35,7 @@ export default {
     }
   },
   async created () {
-    this.user = await CheckLoggedIn()
+    this.user = await this.CheckLoggedIn()
     let servers = await this.GetUserData(res.data.userid)
     this.servers = servers.servers
   },

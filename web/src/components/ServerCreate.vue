@@ -92,7 +92,7 @@ export default {
       duration: 1000 * 10,
       showClose: true
     })
-    this.user = await CheckLoggedIn()
+    this.user = await this.CheckLoggedIn()
     if (this.edit) {
       try {
         let res = await this.axios.get(`api/v1/server/${this.$route.params.serverID}/GetServerInfo`, {

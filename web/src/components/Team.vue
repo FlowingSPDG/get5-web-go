@@ -84,7 +84,7 @@ export default {
     for (let i = 0; i < this.team.steamids.length; i++) {
       this.GetSteamName(this.team.steamids[i])
     }
-    this.user = await CheckLoggedIn()
+    this.user = await this.CheckLoggedIn()
     this.Editable = this.CheckTeamEditable(this.user.userid)
     this.Deletable = this.CheckTeamDeletable(this.user.userid)
   },

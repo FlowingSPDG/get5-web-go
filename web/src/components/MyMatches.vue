@@ -78,7 +78,7 @@ export default {
   async created () {
     let self = this
     try {
-      this.user = await CheckLoggedIn()
+      this.user = await this.CheckLoggedIn()
     } catch (err) {
       this.user = {
         isLoggedIn: false,

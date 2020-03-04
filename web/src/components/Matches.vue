@@ -100,7 +100,7 @@ export default {
         if (this.$route.params.userid) {
           this.all_matches = false
           try {
-            this.user = await CheckLoggedIn()
+            this.user = await this.CheckLoggedIn()
             resolve()
           } catch (err) {
             this.user = {}
@@ -112,7 +112,7 @@ export default {
           }
         } else {
           try {
-            this.user = await CheckLoggedIn()
+            this.user = await this.CheckLoggedIn()
             this.my_matches = this.$route.params.userid === this.user.userid
           } catch (err) {
             this.my_matches = false

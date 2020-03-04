@@ -41,7 +41,7 @@ export default {
     }
   },
   async created () {
-    this.user = await CheckLoggedIn()
+    this.user = await this.CheckLoggedIn()
     if (this.user.userid === this.$route.params.userid || this.$route.path === '/myteams') {
       this.my_teams = true
     }

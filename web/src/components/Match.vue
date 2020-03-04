@@ -305,7 +305,7 @@ export default {
     this.team1 = await team1Promise
     this.team2 = await team2Promise
     this.loading = false
-    this.user = await CheckLoggedIn()
+    this.user = await this.CheckLoggedIn()
     // this.Editable = this.CheckTeamEditable(this.$route.params.teamid,this.user.userid) // TODO
   },
   methods: {

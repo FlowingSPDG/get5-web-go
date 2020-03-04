@@ -75,7 +75,7 @@ export default {
   async mounted () {
     this.LogoTransition = true
     this.activeIndex = this.$route.name
-    this.user = await CheckLoggedIn()
+    this.user = await this.CheckLoggedIn()
     let Version = await axios.get('/api/v1/GetVersion', {
       headers: {
         'Content-Type': 'application/json',

@@ -201,7 +201,7 @@ export default {
     }
   },
   async created () {
-    this.user = await CheckLoggedIn()
+    this.user = await this.CheckLoggedIn()
     this.servers = await this.GetServers()
     this.teams = await this.GetTeams()
     this.mappool = await this.GetMapList()
