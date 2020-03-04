@@ -79,7 +79,7 @@ export default {
     this.user = LoggedIn.data
     let Version = await axios.get('/api/v1/GetVersion')
     this.version = Version.data.version
-    console.log(this.$store.state.auth)
+    // console.log(this.$store.state.auth)
   },
   methods: {
     handleLanguage: function (command) {
