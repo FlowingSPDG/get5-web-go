@@ -187,10 +187,7 @@ export default {
     if (this.edit) {
       try {
         let res = await this.axios.get(`api/v1/team/${this.$route.params.teamid}/GetTeamInfo`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.$store.state.auth}`
-          },
+          headers: this.GenerateHeaders(),
           data: null
         })
         this.form.name = res.data.name

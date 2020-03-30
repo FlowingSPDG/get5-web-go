@@ -77,10 +77,7 @@ export default {
     this.activeIndex = this.$route.name
     this.user = await this.CheckLoggedIn()
     let Version = await axios.get('/api/v1/GetVersion', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.$store.state.auth}`
-      },
+      headers: this.GenerateHeaders(),
       data: null
     })
     this.version = Version.data.version

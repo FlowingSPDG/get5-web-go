@@ -130,10 +130,7 @@ export default {
       return new Promise(async (resolve, reject) => {
         if (userid) {
           const res = await this.axios.get(`/api/v1/GetMatches?userID=${userid}`, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${this.$store.state.auth}`
-            },
+            headers: this.GenerateHeaders(),
             data: {}
           })
           self.loaded = self.loaded + res.data.length
@@ -152,10 +149,7 @@ export default {
           }
         } else {
           const res = await this.axios.get(`/api/v1/GetMatches?offset=${this.loaded}`, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${this.$store.state.auth}`
-            },
+            headers: this.GenerateHeaders(),
             data: {}
           })
           self.loaded = self.loaded + res.data.length

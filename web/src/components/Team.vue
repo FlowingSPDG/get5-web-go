@@ -96,10 +96,7 @@ export default {
       }
       return new Promise(async (resolve, reject) => {
         const res = await this.axios.get(`/api/v1/GetSteamName?steamID=${steamid}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.$store.state.auth}`
-          },
+          headers: this.GenerateHeaders(),
           data: null
         })
         self.players.push({ steamid: steamid, name: res.data })

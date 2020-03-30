@@ -11,10 +11,7 @@ export default {
     async CheckLoggedIn () {
       return new Promise(async (resolve, reject) => {
         const res = await this.axios.get('/api/v1/CheckLoggedIn', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.$store.state.auth}`
-          },
+          headers: this.GenerateHeaders(),
           data: null
         })
         resolve(res.data)
@@ -23,10 +20,7 @@ export default {
     async GetUserData (userid) {
       return new Promise(async (resolve, reject) => {
         const res = await this.axios.get(`/api/v1/user/${userid}/GetUserInfo`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.$store.state.auth}`
-          },
+          headers: this.GenerateHeaders(),
           data: null
         })
         resolve(res.data)
@@ -36,10 +30,7 @@ export default {
       return new Promise(async (resolve, reject) => {
         try {
           const res = await this.axios.get(`/api/v1/team/${teamid}/GetTeamInfo`, {
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${this.$store.state.auth}`
-            },
+            headers: this.GenerateHeaders(),
             data: null
           })
           resolve(res.data)
@@ -60,10 +51,7 @@ export default {
     async GetServerData (serverid) {
       return new Promise(async (resolve, reject) => {
         const res = await this.axios.get(`/api/v1/server/${serverid}/GetServerInfo`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.$store.state.auth}`
-          },
+          headers: this.GenerateHeaders(),
           data: null
         })
         resolve(res.data)
@@ -72,10 +60,7 @@ export default {
     async GetMatchData (matchid) {
       return new Promise(async (resolve, reject) => {
         const res = await this.axios.get(`/api/v1/match/${matchid}/GetMatchInfo`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.$store.state.auth}`
-          },
+          headers: this.GenerateHeaders(),
           data: null
         })
         resolve(res.data)
@@ -84,10 +69,7 @@ export default {
     async GetRecentMatches (teamid) {
       return new Promise(async (resolve, reject) => {
         const res = await this.axios.get(`/api/v1/team/${teamid}/GetRecentMatches`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.$store.state.auth}`
-          },
+          headers: this.GenerateHeaders(),
           data: null
         })
         resolve(res.data)
@@ -96,10 +78,7 @@ export default {
     async GetMapList () {
       return new Promise(async (resolve, reject) => {
         const res = await this.axios.get(`/api/v1/GetMapList`, {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.$store.state.auth}`
-          },
+          headers: this.GenerateHeaders(),
           data: null
         })
         resolve(res.data)
@@ -186,10 +165,7 @@ export default {
     async GetTeams () {
       return new Promise(async (resolve, reject) => {
         const res = await this.axios.get('/api/v1/GetTeamList', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.$store.state.auth}`
-          },
+          headers: this.GenerateHeaders(),
           data: null
         })
         resolve(res.data)
@@ -198,14 +174,20 @@ export default {
     async GetServers () {
       return new Promise(async (resolve, reject) => {
         const res = await this.axios.get('/api/v1/GetServerList', {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.$store.state.auth}`
-          },
+          headers: this.GenerateHeaders(),
           data: null
         })
         resolve(res.data)
       })
+    },
+    GenerateHeaders: function () {
+      let headers = {
+        'Content-Type': 'application/json'
+      }
+      if (this.$store.state.auth !== '') {
+        headers['Authorization'] = `Bearer ${this.$store.state.auth}`
+      }
+      return headers
     }
   }
 }

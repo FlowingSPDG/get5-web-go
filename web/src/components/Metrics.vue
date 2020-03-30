@@ -51,10 +51,7 @@ export default {
   },
   async created () {
     const res = await this.axios.get('/api/v1/GetMetrics', {
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.$store.state.auth}`
-      },
+      headers: this.GenerateHeaders(),
       data: null
     })
     this.metrics.push(res.data)
