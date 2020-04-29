@@ -9,6 +9,7 @@ import (
 
 	"github.com/FlowingSPDG/csgo-log-http"
 	v1api "github.com/FlowingSPDG/get5-web-go/server/src/api/v1"
+	v2api "github.com/FlowingSPDG/get5-web-go/server/src/api/v2"
 	"github.com/FlowingSPDG/get5-web-go/server/src/cfg"
 	"github.com/FlowingSPDG/get5-web-go/server/src/db"
 	"github.com/FlowingSPDG/get5-web-go/server/src/grpc"
@@ -114,12 +115,12 @@ func main() {
 		}
 	}
 
-	/*
-		// V2 API(New. authenticated with JWT.)
-		v2 := r.Group("/api/v2")
-		{
-			v2.GET("/me", api.AuthMidldleware.MiddlewareFunc(), meHandler)
+	// V2 API(New. authenticated with JWT.)
+	v2 := r.Group("/api/v2")
+	{
+		v2.GET("/me", v2api.AuthMidldleware.MiddlewareFunc(), meHandler)
 
+		/*
 			// Refresh time can be longer than token timeout
 			// v2.GET("/refresh_token", api.AuthMidldleware.RefreshHandler)
 			v2.GET("/login", api.AuthMidldleware.LoginHandler)
@@ -189,8 +190,8 @@ func main() {
 				server.PUT("/:serverID/edit", api.AuthMidldleware.MiddlewareFunc(), api.EditServer)
 				server.DELETE("/:serverID/delete", api.AuthMidldleware.MiddlewareFunc(), api.DeleteServer)
 			}
-		}
-	*/
+		*/
+	}
 
 	if !config.Cnf.APIONLY {
 		entrypoint := "./static/index.html"
