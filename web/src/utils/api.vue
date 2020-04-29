@@ -184,8 +184,8 @@ export default {
       let headers = {
         'Content-Type': 'application/json'
       }
-      if (this.$store.state.auth !== '') {
-        headers['Authorization'] = `Bearer ${this.$store.state.auth}`
+      if (localStorage.auth !== '') {
+        headers['Authorization'] = `Bearer ${localStorage.auth}`
       }
       return headers
     }

@@ -1,15 +1,18 @@
+<template>
+  <div>
+  </div>
+</template>
+
 <script>
 import axios from 'axios'
 export default {
   name: 'App',
   data () {
-    return {
-      auth: ''
-    }
+    return {}
   },
   async mounted () {
-    this.$store.state.auth = this.$route.query.auth
-    this.$store.state.expire = this.$route.query.expire
+    localStorage.name = this.$route.query.auth
+    localStorage.expire = this.$route.query.expire
     this.$router.push('/')
   }
 }

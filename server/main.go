@@ -196,7 +196,6 @@ func main() {
 		r.Use(static.Serve("/js", static.LocalFile("./static/js", false)))
 		r.Use(static.Serve("/img", static.LocalFile("./static/img", false)))
 		r.Use(static.Serve("/fonts", static.LocalFile("./static/fonts", false)))
-
 	} else {
 		log.Println("API ONLY MODE")
 	}
