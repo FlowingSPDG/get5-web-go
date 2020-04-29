@@ -6,6 +6,8 @@ github.com/FlowingSPDG/csgo-log v1.1.2 h1:l3E2kekWBKgU3Lr7O+eAothagIOEdLw8aI2SXU
 github.com/FlowingSPDG/csgo-log v1.1.2/go.mod h1:bbOpTuHBZ0fp3q3aEt3coxOKc1Uc+BexDtfasKZwVS4=
 github.com/FlowingSPDG/csgo-log-http v0.0.0-20200217191304-7b96ab04f0e9 h1:KDZlOjtVPYDC8LUoeoZju40ieMEJGBU2Zidv2tYOQ0g=
 github.com/FlowingSPDG/csgo-log-http v0.0.0-20200217191304-7b96ab04f0e9/go.mod h1:4rjh18Dcpd9Avk5wXtiawP1nhsod9fdEjfkhYvDooPM=
+github.com/FlowingSPDG/get5-web-go v0.1.2 h1:iiksY86q5C3Au1nQzVhfO68iUC3TGXSisTmu2urCofI=
+github.com/FlowingSPDG/get5-web-go v0.1.2/go.mod h1:mZzS29WvAoezTKU2AbfvvwyNEDulD5ae9PmOAgJo/gU=
 github.com/FlowingSPDG/go-steam v0.0.0-20200304111708-e30ea2f91a83 h1:g3VY8PBeP2ntkCAIs0eTPH9X1q+ZrFcTWmvtioURpcw=
 github.com/FlowingSPDG/go-steam v0.0.0-20200304111708-e30ea2f91a83/go.mod h1:cBPvfv15MeOWzZuFugEXy7Nw/JTk/D8ZalNSg9FmKH8=
 github.com/ajg/form v1.5.1 h1:t9c7v8JUKu/XxOGBU0yjNpaMloxGEJhUkqFRq0ibGeU=
@@ -14,6 +16,7 @@ github.com/appleboy/gin-jwt v2.5.0+incompatible h1:oLQTP1fiGDoDKoC2UDqXD9iqCP44A
 github.com/appleboy/gin-jwt v2.5.0+incompatible/go.mod h1:pG7tv32IEe5wEh1NSQzcyD02ZZAqZWp07RdGiIhgaRQ=
 github.com/appleboy/gin-jwt/v2 v2.6.3 h1:aK4E3DjihWEBUTjEeRnGkA5nUkmwJPL1CPonMa2usRs=
 github.com/appleboy/gin-jwt/v2 v2.6.3/go.mod h1:MfPYA4ogzvOcVkRwAxT7quHOtQmVKDpTwxyUrC2DNw0=
+github.com/appleboy/gofight/v2 v2.1.2 h1:VOy3jow4vIK8BRQJoC/I9muxyYlJ2yb9ht2hZoS3rf4=
 github.com/appleboy/gofight/v2 v2.1.2/go.mod h1:frW+U1QZEdDgixycTj4CygQ48yLTUhplt43+Wczp3rw=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/client9/misspell v0.3.4/go.mod h1:qj6jICC3Q7zFZvVWo7KLAzC3yx5G7kyvSDkc90ppPyw=
