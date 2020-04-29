@@ -11,7 +11,7 @@ export default {
     return {}
   },
   async mounted () {
-    localStorage.name = this.$route.query.auth
+    localStorage.auth = this.$route.query.auth
     localStorage.expire = this.$route.query.expire
     this.$router.push('/')
   }
