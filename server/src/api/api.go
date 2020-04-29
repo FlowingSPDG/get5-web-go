@@ -24,6 +24,7 @@ const (
 
 	identityKey = "id"
 	nameKey     = "name"
+	adminKey    = "admin"
 )
 
 var (
@@ -36,7 +37,7 @@ func init() {
 
 	var err error
 	AuthMidldleware, err = jwt.New(&jwt.GinJWTMiddleware{
-		Realm:       "test zone",
+		Realm:       "GET5-WEB-GO JWT",
 		Key:         []byte(config.Cnf.Cookie),
 		Timeout:     time.Hour,
 		MaxRefresh:  time.Hour,
@@ -47,6 +48,7 @@ func init() {
 				return jwt.MapClaims{
 					identityKey: v.ID,
 					nameKey:     v.Name,
+					adminKey:    v.Admin,
 				}
 			}
 			return jwt.MapClaims{}
@@ -55,8 +57,9 @@ func init() {
 			claims := jwt.ExtractClaims(c)
 			log.Printf("claims : %v\n", claims)
 			return &db.UserData{
-				ID:   int(claims[identityKey].(float64)),
-				Name: claims[nameKey].(string),
+				ID:    int(claims[identityKey].(float64)),
+				Name:  claims[nameKey].(string),
+				Admin: claims[adminKey].(bool),
 			}
 		},
 		Authenticator: func(c *gin.Context) (interface{}, error) {
